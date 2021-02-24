@@ -42,22 +42,22 @@ getBean(A.class) //获取A
 ```java
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		// Quick check for existing instance without full singleton lock
-    //查找1级缓存
+    		//查找1级缓存
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) { //是否正在创建？一个ConcurrentHashMap做标记
-      //查找2级缓存，earlySingletonObject指未完成初始化的对象，如依赖的属性未完成注入
+      			//查找2级缓存，earlySingletonObject指未完成初始化的对象，如依赖的属性未完成注入
 			singletonObject = this.earlySingletonObjects.get(beanName);
 			if (singletonObject == null && allowEarlyReference) {
-        //这把锁同步缓存的更新 singletonObjects -> earlySingletonObjects -> singletonFactories
-        //加锁后再次查询，因为其他线程可能获取到锁，并完成了更新
+        			//这把锁同步缓存的更新 singletonObjects -> earlySingletonObjects -> singletonFactories
+        			//加锁后再次查询，因为其他线程可能获取到锁，并完成了更新
 				synchronized (this.singletonObjects) {
 					// Consistent creation of early reference within full singleton lock
 					singletonObject = this.singletonObjects.get(beanName);
 					if (singletonObject == null) {
 						singletonObject = this.earlySingletonObjects.get(beanName);
 						if (singletonObject == null) {
-              //关键在这里，最终从3级缓存拿到ObjectFactory，获取到early reference,解决了循环依赖问题
-              //ObjectFactory从哪里来？下面会讲到
+              						//关键在这里，最终从3级缓存拿到ObjectFactory，获取到early reference,解决了循环依赖问题
+           						//ObjectFactory从哪里来？下面会讲到
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 							if (singletonFactory != null) {
 								singletonObject = singletonFactory.getObject();
@@ -89,7 +89,7 @@ AbstractAutowireCapableBeanFactory.doCreateBean
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-      //创建当前Bean实例，先设置ObjectFactory，后续可能用来解决循环引用问题
+      			//创建当前Bean实例，先设置ObjectFactory，后续可能用来解决循环引用问题
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 ```
