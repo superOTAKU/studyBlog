@@ -40,5 +40,3 @@ Branch 'main' set up to track remote branch 'main' from 'origin'.
 ```
 
 成功！
-
-5.本地分支追溯远程分支
