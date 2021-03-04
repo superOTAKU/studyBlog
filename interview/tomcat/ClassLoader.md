@@ -62,6 +62,26 @@ delegate模式下，加载顺序如下：
 + WebApp自身类库的优先级高于parent ClassLoader，但低于ExtClassLoader
 + 提供delegate选项，可根据需要调整类加载的优先级
 
+## 更复杂的架构
+
+<pre>
+  Bootstrap
+      |
+    System
+      |
+    Common
+     /  \
+Server  Shared
+         /  \
+   Webapp1  Webapp2 ...
+</pre>
+
+### Shared
+各个webapp共享，但对tomcat内部不可见
+
+### Server
+tomcat内部可见，但对webapp不可见
+
 ## 参考资料
 
 ### 官方文档
